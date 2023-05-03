@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: lsgit
+spec:
+  results:
+      - name: version
+  params:
+      - name: IMAGE
+        type: string
+  steps:
+  - name: lista
+    image: alpine/git:latest
+    script: |
+     #!/usr/bin/env sh
+     git config --global --add safe.directory '*'
+     #git clone https://github.com/daraxta/CICDTekton.git
+     ls
+     versiongit=$(git rev-parse --short HEAD)
+     echo $versiongit
+     echo -n $IMAGE:$versiongit > $(results.version.path)
+    workingDir: $(workspaces.output.path) 
+    env: 
+    - name: IMAGE
+      value: $(params.IMAGE)
+  workspaces:
+    - name: output
+
+ 
+    
+

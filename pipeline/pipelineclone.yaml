@@ -1,0 +1,74 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: clone-build-push
+spec:
+  description: |
+    This pipeline clones a git repo, builds a Docker image with Kaniko and
+    pushes it to a registry    
+  params:
+  - name: repo-url
+    type: string
+  - name: image-reference
+    type: string
+  workspaces:
+  - name: shared-data
+  - name: docker-credentials
+  - name: data-shared-git
+  - name: auth-git
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: $(params.repo-url)
+  - name: listar
+    runAfter: 
+      - fetch-source
+    taskRef:
+      name: lsgit
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: IMAGE
+      value: $(params.image-reference)
+  - name: build-push
+    runAfter: ["listar"]
+    taskRef:
+      name: kaniko
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials
+    params:
+    - name: IMAGE
+      value: "$(tasks.listar.results.version)"
+  - name: modificar-manifest-deploy
+    runAfter:
+      - build-push
+    taskRef:
+      name: gitlist
+    params:
+    - name: IMAGE
+      value: "$(tasks.listar.results.version)"
+    workspaces:
+    - name: output
+      workspace: data-shared-git
+    - name: auth-git
+      workspace: auth-git
+  - name: desplegar-k8s
+    runAfter:
+      - modificar-manifest-deploy
+    taskRef:
+      name: kubernetes-actions
+    params:
+      - name: script
+        value: |
+            kubectl apply --filename https://raw.githubusercontent.com/daraxta/Kube/main/kubernetes/deployment.yaml
+  
