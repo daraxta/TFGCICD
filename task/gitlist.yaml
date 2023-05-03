@@ -34,7 +34,7 @@ spec:
      ls
      git config --global user.name "David"
      git config --global user.email "admin2314@yopmail.com"
-     sed -ri "s#davidrv17/ejemplo:.*#$v#g" kubernetes/deployment.yaml
+     sed -ri "s#davidrv17/pythonapp:.*#$v#g" kubernetes/deployment.yaml
      cat kubernetes/deployment.yaml | grep "davidrv17"
      git add .
      git commit -m "UltimaVersion"

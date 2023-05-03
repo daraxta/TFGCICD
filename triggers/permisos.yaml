@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: permisos-deployments-services
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: permisos-binding
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: permisos-deployments-services
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+
+
+
+  
