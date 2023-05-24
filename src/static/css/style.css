@@ -1,0 +1,15 @@
+h1 {
+    font-family: 'Untitled Serif';
+    font-size: 40px;
+    line-height: 98px;
+    font-weight: 400;
+}
+a {
+    background-color: #33FFA5;
+    color: white;
+    padding: 15px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
