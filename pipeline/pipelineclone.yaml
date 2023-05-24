@@ -17,7 +17,7 @@ spec:
   - name: data-shared-git
   - name: auth-git
   tasks:
-  - name: fetch-source
+  - name: clonar-repositorio
     taskRef:
       name: git-clone
     workspaces:
@@ -28,7 +28,7 @@ spec:
       value: $(params.repo-url)
   - name: listar
     runAfter: 
-      - fetch-source
+      - clonar-repositorio
     taskRef:
       name: lsgit
     workspaces:
@@ -37,7 +37,7 @@ spec:
     params:
     - name: IMAGE
       value: $(params.image-reference)
-  - name: build-push
+  - name: crear-imagen-docker
     runAfter: ["listar"]
     taskRef:
       name: kaniko
@@ -51,7 +51,7 @@ spec:
       value: "$(tasks.listar.results.version)"
   - name: modificar-manifest-deploy
     runAfter:
-      - build-push
+      - crear-imagen-docker
     taskRef:
       name: gitlist
     params:

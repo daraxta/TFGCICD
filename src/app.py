@@ -30,6 +30,7 @@ else:
     #print ("SSH session login successful")
     s.sendline ('ansible all --list-host')
     s.prompt()
+    s.sendline ('ansible all -m copy -a "src=/html/ dest=/var/www/html"')
     print (s.before.decode('UTF-8'))
     # s.logout()
 
@@ -39,39 +40,36 @@ def inicio():
     return render_template("inicio.html")
 
 #Página de actualizaciones
-@app.route('/update/')
+@app.route('/iapache/')
 def update():
-    print('Nice update')
-    s.sendline ('ansible all -a "apt-get update"')
+    s.sendline ('ansible-playbook /etc/ansible/apache.yaml')
     s.prompt()         # match the prompt
     print (s.before.decode('UTF-8'))
-    
-    return render_template("update.html")
+    return render_template("instalarapache.html")
 
 #Página de lista
-@app.route('/list/')
+@app.route('/papache/')
 def lists():
-    s.sendline ('ansible all -a "ls"')
-    s.prompt()         # match the prompt
+    s.sendline ('ansible-playbook /etc/ansible/desinstalarapache.yaml')
+    s.prompt()
     print (s.before.decode('UTF-8'))
-    return render_template("list.html")
+    return render_template("desinstalarapache.html")
 
+#Pagina de testeo
+@app.route('/rapache/')
+def ping():
+    s.sendline ('ansible all -a "systemctl restart apache2"')
+    s.prompt()
+    print (s.before.decode('UTF-8'))
+    return render_template("reiniciarapache.html")
 
 #Pagina de apagado
 @app.route('/poweroff/')
 def poweroff():
     s.sendline ('ansible all -a "poweroff"')
-    s.prompt()         # match the prompt
+    s.prompt()
     print (s.before.decode('UTF-8'))
     return render_template("poweroff.html")
-
-#Pagina de testeo
-@app.route('/ping/')
-def ping():
-    s.sendline ('ansible all -m ping')
-    s.prompt()         # match the prompt
-    print (s.before.decode('UTF-8'))
-    return render_template("ping.html")
 
 #Permitimos que se pueda acceder a través de la red por el puerto 5000
 app.run("0.0.0.0",5000)
