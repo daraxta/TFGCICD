@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tektonapp
+  name: pythonapp
 spec:
   destination:
     name: ''
@@ -9,7 +9,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: kubernetes
-    repoURL: 'https://github.com/daraxta/Preproyecto.git'
+    repoURL: 'https://github.com/daraxta/Kube.git'
     targetRevision: HEAD
   sources: []
   project: default
