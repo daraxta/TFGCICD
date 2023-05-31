@@ -10,7 +10,7 @@ h1 {
 }
 a {
     background-color: #a0ff33;
-    color: white;
+    color: black;
     padding: 15px 25px;
     text-decoration: none;
     cursor: pointer;
@@ -20,4 +20,20 @@ a {
 body {
    background-image: url("background.png");
    background-size: cover;
+}
+.context {
+  width: 100%;
+  position: absolute;
+  top: 194px;
+}
+.context h1 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 4px;
+  font-size: 50px;
+}
+.test {
+  position: absolute;
+  margin-left: 33%;
+  margin-top: 20%;
 }
