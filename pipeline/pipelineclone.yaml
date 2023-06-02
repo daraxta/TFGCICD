@@ -4,8 +4,8 @@ metadata:
   name: clone-build-push
 spec:
   description: |
-    This pipeline clones a git repo, builds a Docker image with Kaniko and
-    pushes it to a registry    
+    Esta pipeline clona el repositorio, crea una imagen 
+    de Docker con Kaniko y la despliega en Kubernetes
   params:
   - name: repo-url
     type: string
